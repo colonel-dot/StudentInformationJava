@@ -1,7 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     static String exits;
@@ -10,7 +8,7 @@ public class Main {
     static Scanner in = new Scanner(System.in);
     static String name, gender, number, account, password;
     static int score, age;
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         String flag;
         getStudentInformation();
         getTeacherInformation();
@@ -32,9 +30,10 @@ public class Main {
     public static void studentScreen(){
 
         Student self = (Student) login(1);
+        if(self == null) {
+            return;
+        }
         while(true){
-            System.out.print("\033[H\033[2J");  // 或使用Unicode形式：\u001B[H\u001B[2J
-            System.out.flush();
             System.out.println("选择你要进行的操作：\n1.查看个人信息\n2.查看班级成绩\n3.上课签到");
             System.out.println("4.退出程序");
             String choice = in.nextLine();
@@ -60,9 +59,12 @@ public class Main {
         }
     }
 
-    public static void teacherScreen() throws IOException {
+    public static void teacherScreen() throws IOException, InterruptedException {
         TeacherFunctions teacherFunctions = new TeacherFunctions();
-        login(2);
+        Person person = login(2);
+        if(person == null) {
+            return;
+        }
         while(true){
             System.out.print("\033[H\033[2J");
             System.out.flush();
@@ -86,11 +88,14 @@ public class Main {
                 System.out.println("输入任意字符返回");
                 exits = in.nextLine();
             } else if(choice.equals("4")) {
-
+                teacherFunctions.reviseStudent(students);
             } else if(choice.equals("5")) {
-
+                Collections.sort(students, (o1, o2) -> o2.getScore() - o1.getScore());
+                for(Student s : students){
+                    System.out.println(s.getName() + " " + s.getNumber() + " " + s.getAge() + " " + s.getScore());
+                }
             } else if(choice.equals("6")) {
-
+                teacherFunctions.viewApperance(students);
             }else if(choice.equals("7")) {
                 return;
             } else{
@@ -145,6 +150,7 @@ public class Main {
                 throw(new LoginException("账号登陆失败"));
             } catch (Exception e) {
                 System.out.println(e);
+                return null;
             }
         }
         return null;
