@@ -66,8 +66,6 @@ public class Main {
             return;
         }
         while(true){
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
             System.out.println("选择你要进行的操作：\n1.添加学生信息\n2.删除学生信息\n3.查看学生信息");
             System.out.println("4.修改学生信息\n5.按成绩进行排序\n6.查看学生签到\n7.退出程序");
             String choice = in.nextLine();
@@ -78,7 +76,9 @@ public class Main {
                 age = Integer.parseInt(in.nextLine());
                 number = in.nextLine();
                 score = Integer.parseInt(in.nextLine());
-                teacherFunctions.addStudents(new Student(name, gender, age, number, score, number, number));
+                Student student = new Student(name, gender, age, number, score, number, number);
+                students.add(student);
+                teacherFunctions.addStudents(student);
             } else if(choice.equals("2")) {
                 teacherFunctions.deleteStudent(students);
             } else if(choice.equals("3")) {

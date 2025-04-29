@@ -82,6 +82,7 @@ public class TeacherFunctions {
          }
          for(Thread t : threads){
              t.start();
+             t.join();
          }
          System.out.println("(输入任意字符返回）");
          exits = sc.nextLine();
